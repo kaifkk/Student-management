@@ -1,0 +1,34 @@
+[
+    {
+        "id": "23-51629-2",
+        "name": "Kaif Khan",
+        "marks": {
+            "Bangla": 90.0,
+            "English": 90.0,
+            "Mathematics": 90.0,
+            "Science": 90.0,
+            "BGS": 90.0,
+            "ICT": 90.0
+        },
+        "total": 540,
+        "percentage": 90.0,
+        "grade": "A+",
+        "status": "Pass"
+    },
+    {
+        "id": "23",
+        "name": "kk",
+        "marks": {
+            "Bangla": 90.0,
+            "English": 90.0,
+            "Mathematics": 90.0,
+            "Science": 40.5,
+            "BGS": 90.0,
+            "ICT": 90.0
+        },
+        "total": 490,
+        "percentage": 81.75,
+        "grade": "A+",
+        "status": "Pass"
+    }
+]
