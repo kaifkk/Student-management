@@ -17,10 +17,10 @@ class DashboardApp(Tk):
         self.total_student_label = Label(self, text=f"Total Students: {len(self.manager.students)}")
         self.total_student_label.pack(pady=5)
         Button(self, text="Add Student", command=self.open_add_student).pack(pady=5)
-        Button(self, text="View Students", command=self.not_implemented).pack(pady=5)
-        Button(self, text="Search Student", command=self.not_implemented).pack(pady=5)
-        Button(self, text="Update Student", command=self.not_implemented).pack(pady=5)
-        Button(self, text="Delete Student", command=self.not_implemented).pack(pady=5)
+        Button(self, text="View Students", command=self.open_view_students).pack(pady=5)
+        Button(self, text="Search Student", command=self.open_search_student).pack(pady=5)
+        Button(self, text="Update Student", command=self.open_update_student).pack(pady=5)
+        Button(self, text="Delete Student", command=self.open_delete_student).pack(pady=5)
         Button(self, text="Statistics", command=self.not_implemented).pack(pady=5)
         Button(self, text="Exit", command=self.destroy).pack(pady=5)
 
@@ -31,6 +31,22 @@ class DashboardApp(Tk):
         self.withdraw()
         AddStudentPage(self, self.manager)
     
+        def open_view_students(self):
+        self.withdraw()
+        ViewStudentsPage(self, self.manager)
+
+    def open_search_student(self):
+        self.withdraw()
+        SearchStudentPage(self, self.manager)
+
+    def open_update_student(self):
+        self.withdraw()
+        UpdateStudentPage(self, self.manager)
+
+    def open_delete_student(self):
+        self.withdraw()
+        DeleteStudentPage(self, self.manager)
+
     def not_implemented(self):
         messagebox.showinfo("Coming soon", "This feature belongs to another module.")
 
