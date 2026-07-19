@@ -1,5 +1,7 @@
 SUBJECTS = ("Bangla", "English", "Mathematics", "Science", "BGS", "ICT")
 
+TABLE_HEADINGS = ("ID", "Name", "Total", "Percentage", "Grade", "Status")
+
 GRADE_TABLE = {
     80: "A+",
     70: "A",

@@ -65,3 +65,52 @@ class StudentManager:
         self.existing_ids.add(student_id)
         self.save_to_file()
         return new_student
+
+    def find_by_id(self, student_id):
+        for student in self.students:
+            if student.id == student_id:
+                return student
+        return None
+
+    def find_by_name(self, name):
+        results = []
+        name = name.lower()
+
+        for student in self.students:
+            if name in student.name.lower():
+                results.append(student)
+
+        return results
+
+    def refresh_ids(self):
+        ids = set()
+
+        for student in self.students:
+            ids.add(student.id)
+
+        self.existing_ids = ids
+
+    def update_student(self, student_id, name, marks):
+        student = self.find_by_id(student_id)
+        if student is None:
+            return False
+
+        student.name = name
+        student.marks = marks
+        student.total = student.calculate_total()
+        student.percentage = student.calculate_percentage()
+        student.grade = student.calculate_grade()
+        student.status = student.calculate_status()
+
+        self.save_to_file()
+        return student
+
+    def delete_student(self, student_id):
+        student = self.find_by_id(student_id)
+        if student is None:
+            return False
+
+        self.students.remove(student)
+        self.refresh_ids()
+        self.save_to_file()
+        return True
