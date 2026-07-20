@@ -83,3 +83,34 @@ class ResultAnalyzer:
             "topper": self.topper(),
             "lowest_performer": self.lowest_performer(),
         }
+
+class StatisticsPage(Toplevel):
+    
+    """ViewStudentsPage o SearchStudentPage er moto same niyom mene banano."""
+
+    def __init__(self, parent, manager):
+        super().__init__(parent)
+        self.parent = parent
+        self.manager = manager
+        self.title("Class Statistics")
+        self.geometry("560x640")
+        self.summary = None
+        self.build_page()
+        
+    def build_page(self):
+        Label(self, text="Class Statistics", font=("Arial", 14, "bold")).pack(pady=10)
+
+        if len(self.manager.students) == 0:   # Kono student na thakle empty message dekhabe
+            Label(self, text="Ekhono kono student er record nei.").pack(pady=20)
+            Button(self, text="Back", command=self.go_back).pack(pady=10)
+            return
+
+        try:
+            analyzer = ResultAnalyzer(self.manager.students)
+            self.summary = analyzer.full_summary()
+        except ValueError as e:
+            # Exception handling: khali list hole error dekhabe, crash korbe na
+            Label(self, text=str(e)).pack(pady=20)
+            Button(self, text="Back", command=self.go_back).pack(pady=10)
+            return   
+        
