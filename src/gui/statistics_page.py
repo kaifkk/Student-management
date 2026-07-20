@@ -112,5 +112,29 @@ class StatisticsPage(Toplevel):
             # Exception handling: khali list hole error dekhabe, crash korbe na
             Label(self, text=str(e)).pack(pady=20)
             Button(self, text="Back", command=self.go_back).pack(pady=10)
-            return   
+            return
+          
+        summary = self.summary
+        stats_text = (
+            f"Total Students: {summary['total_students']}\n"
+            f"Class Average (Total marks): {summary['class_average']}\n"
+            f"Highest Total: {summary['highest_total']}\n"
+            f"Lowest Total: {summary['lowest_total']}\n"
+            f"Median Total: {summary['median_total']}\n"
+            f"Std Deviation: {summary['std_dev']}\n"
+            f"Pass: {summary['pass_fail']['Pass']}   |   Fail: {summary['pass_fail']['Fail']}\n"
+            f"Topper: {summary['topper'].name} ({summary['topper'].percentage}%)\n"
+            f"Lowest: {summary['lowest_performer'].name} ({summary['lowest_performer'].percentage}%)"
+        )
+        Label(self, text=stats_text, justify="left", font=("Arial", 11)).pack(pady=10)
+
+        # subject er table
         
+        Label(self, text="Subject-wise Average", font=("Arial", 12, "bold")).pack(pady=(10, 5))
+        subj_table = Treeview(self, columns=("Subject", "Average"), show="headings", height=6)
+        subj_table.heading("Subject", text="Subject")
+        subj_table.heading("Average", text="Average")
+        for subject, avg in summary["subject_avg"].items():
+            subj_table.insert("", "end", values=(subject, round(avg, 2)))
+        subj_table.pack(pady=5)
+         
