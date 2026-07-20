@@ -138,3 +138,15 @@ class StatisticsPage(Toplevel):
             subj_table.insert("", "end", values=(subject, round(avg, 2)))
         subj_table.pack(pady=5)
          
+       # ei table e grade distribution dekhabe
+       
+        Label(self, text="Grade Distribution", font=("Arial", 12, "bold")).pack(pady=(10, 5))
+        grade_table = Treeview(self, columns=("Grade", "Count"), show="headings", height=6)
+        grade_table.heading("Grade", text="Grade")
+        grade_table.heading("Count", text="Count")
+        for grade, count in summary["grade_dist"].items():
+            grade_table.insert("", "end", values=(grade, count))
+        grade_table.pack(pady=5)
+
+        Button(self, text="Export Report (.txt)", command=self.export_report).pack(pady=5)
+        Button(self, text="Back", command=self.go_back).pack(pady=10)        
