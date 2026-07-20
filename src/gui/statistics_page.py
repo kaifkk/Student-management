@@ -19,7 +19,7 @@ class ResultAnalyzer:
 
     def _totals(self):
         if not self.students:
-            raise ValueError("Kono student er tothyo pawa jaini.")
+            raise ValueError("No student data available.")
         return np.array([s.total for s in self.students], dtype=float)
 
     def class_average(self):
@@ -38,15 +38,18 @@ class ResultAnalyzer:
         return float(np.std(self._totals()))
 
     def pass_fail_count(self):
-        pass_koreche = sum(1 for s in self.students if s.status == "Pass")
-        fail_koreche = len(self.students) - pass_koreche
-        return {"Pass": pass_koreche, "Fail": fail_koreche}
+        passed = sum(1 for s in self.students if s.status == "Pass")
+        failed = len(self.students) - passed
+        return {"Pass": passed, "Fail": failed}
+    
+    #                    subject-wise 
 
     def subject_wise_average(self):
-        result = {}                          # Dictionary use kora hoyeche
+        result = {}  
         for i in range(len(SUBJECTS)):
             marks = np.array([s.marks[i] for s in self.students], dtype=float)
             result[SUBJECTS[i]] = float(np.mean(marks)) if len(marks) else 0.0
+        return result
         return result
 
     #                    grade distribution
@@ -101,7 +104,7 @@ class StatisticsPage(Toplevel):
         Label(self, text="Class Statistics", font=("Arial", 14, "bold")).pack(pady=10)
 
         if len(self.manager.students) == 0:   # Kono student na thakle empty message dekhabe
-            Label(self, text="Ekhono kono student er record nei.").pack(pady=20)
+            Label(self, text="No student records available yet.").pack(pady=20)
             Button(self, text="Back", command=self.go_back).pack(pady=10)
             return
 
@@ -109,7 +112,9 @@ class StatisticsPage(Toplevel):
             analyzer = ResultAnalyzer(self.manager.students)
             self.summary = analyzer.full_summary()
         except ValueError as e:
+            
             # Exception handling: khali list hole error dekhabe, crash korbe na
+            
             Label(self, text=str(e)).pack(pady=20)
             Button(self, text="Back", command=self.go_back).pack(pady=10)
             return
@@ -152,9 +157,10 @@ class StatisticsPage(Toplevel):
         Button(self, text="Back", command=self.go_back).pack(pady=10)
 
     def export_report(self):
-        """File handling (lekha/write): borotomon statistics ke ekta text file e save kore."""
+        """File handling (lekha/write): currently available statistics ke ekta text file e save kore."""
+        
         if self.summary is None:
-            messagebox.showerror("Error", "Export korar moto kono data nei.")
+            messagebox.showerror("Error", "No statistics to export.")
             return
 
         filepath = filedialog.asksaveasfilename(
@@ -185,12 +191,11 @@ class StatisticsPage(Toplevel):
                 f.write("\nGrade Distribution:\n")
                 for grade, count in s["grade_dist"].items():
                     f.write(f"  {grade}: {count}\n")
-            messagebox.showinfo("Exported", f"Report save hoyeche:\n{filepath}")
+            messagebox.showinfo("Exported", f"Report saved to:\n{filepath}")
         except IOError as e:
-            # Exception handling: file lekha na gele error dekhabe
-            messagebox.showerror("Error", f"File lekha jayni: {e}")
+            messagebox.showerror("Error", f"Could not write file: {e}")
         except PermissionError as e:
-            messagebox.showerror("Error", f"Onumoti nei (permission denied): {e}")
+            messagebox.showerror("Error", f"Permission denied: {e}")
 
     def go_back(self):
         self.parent.deiconify()
