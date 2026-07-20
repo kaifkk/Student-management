@@ -5,16 +5,15 @@ import numpy as np
 from src.models.config import SUBJECTS
 
 
-
 class ResultAnalyzer:
     """
     StudentManager theke shob student er object/list niye puro class er
-    statistics calculate kora hoy. Ekhane prottek student er 
-    id, name, marks (subject onujayi), total, percentage, grade, ar status use kore 
-    bibhinno statistical analysis kora hoise. 
+    statistics calculate kora hoy. Ekhane prottek student er
+    id, name, marks (subject onujayi), total, percentage, grade, ar status use kore
+    bibhinno statistical analysis kora hoise.
     Ekhane overall class average, highest/lowest total, median, std deviation,
     """
-    
+
     def __init__(self, students):
         self.students = students
 
@@ -51,7 +50,7 @@ class ResultAnalyzer:
         return result
 
     #                    grade distribution
-    
+
     def unique_grades(self):
         return {s.grade for s in self.students}  # Set use kora hoyeche
 
@@ -68,7 +67,7 @@ class ResultAnalyzer:
         return min(self.students, key=lambda s: s.percentage)
 
     #             Overall summary
-    
+
     def full_summary(self):
         return {
             "total_students": len(self.students),
@@ -84,8 +83,9 @@ class ResultAnalyzer:
             "lowest_performer": self.lowest_performer(),
         }
 
+
 class StatisticsPage(Toplevel):
-    
+
     """ViewStudentsPage o SearchStudentPage er moto same niyom mene banano."""
 
     def __init__(self, parent, manager):
@@ -96,7 +96,7 @@ class StatisticsPage(Toplevel):
         self.geometry("560x640")
         self.summary = None
         self.build_page()
-        
+
     def build_page(self):
         Label(self, text="Class Statistics", font=("Arial", 14, "bold")).pack(pady=10)
 
@@ -113,7 +113,7 @@ class StatisticsPage(Toplevel):
             Label(self, text=str(e)).pack(pady=20)
             Button(self, text="Back", command=self.go_back).pack(pady=10)
             return
-          
+
         summary = self.summary
         stats_text = (
             f"Total Students: {summary['total_students']}\n"
@@ -129,7 +129,7 @@ class StatisticsPage(Toplevel):
         Label(self, text=stats_text, justify="left", font=("Arial", 11)).pack(pady=10)
 
         # subject er table
-        
+
         Label(self, text="Subject-wise Average", font=("Arial", 12, "bold")).pack(pady=(10, 5))
         subj_table = Treeview(self, columns=("Subject", "Average"), show="headings", height=6)
         subj_table.heading("Subject", text="Subject")
@@ -137,9 +137,9 @@ class StatisticsPage(Toplevel):
         for subject, avg in summary["subject_avg"].items():
             subj_table.insert("", "end", values=(subject, round(avg, 2)))
         subj_table.pack(pady=5)
-         
-       # ei table e grade distribution dekhabe
-       
+
+        # ei table e grade distribution dekhabe
+
         Label(self, text="Grade Distribution", font=("Arial", 12, "bold")).pack(pady=(10, 5))
         grade_table = Treeview(self, columns=("Grade", "Count"), show="headings", height=6)
         grade_table.heading("Grade", text="Grade")
@@ -149,11 +149,8 @@ class StatisticsPage(Toplevel):
         grade_table.pack(pady=5)
 
         Button(self, text="Export Report (.txt)", command=self.export_report).pack(pady=5)
-        Button(self, text="Back", command=self.go_back).pack(pady=10)   
-        
-        
-             
-        
+        Button(self, text="Back", command=self.go_back).pack(pady=10)
+
     def export_report(self):
         """File handling (lekha/write): borotomon statistics ke ekta text file e save kore."""
         if self.summary is None:
@@ -190,21 +187,18 @@ class StatisticsPage(Toplevel):
                     f.write(f"  {grade}: {count}\n")
             messagebox.showinfo("Exported", f"Report save hoyeche:\n{filepath}")
         except IOError as e:
-            
             # Exception handling: file lekha na gele error dekhabe
-            
             messagebox.showerror("Error", f"File lekha jayni: {e}")
         except PermissionError as e:
             messagebox.showerror("Error", f"Onumoti nei (permission denied): {e}")
 
     def go_back(self):
         self.parent.deiconify()
-        self.destroy()        
-        
+        self.destroy()
+
+
 #                        -----------
-
-# Just nije nije TEST KORAR JONNO je amr code run kore kina 
-
+# Just nije nije TEST KORAR JONNO je amr code run kore kina
 #                        -----------
 
 if __name__ == "__main__":
@@ -216,4 +210,3 @@ if __name__ == "__main__":
     root.withdraw()
     page = StatisticsPage(root, manager)
     root.mainloop()
-        
