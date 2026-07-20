@@ -200,3 +200,20 @@ class StatisticsPage(Toplevel):
     def go_back(self):
         self.parent.deiconify()
         self.destroy()        
+        
+#                        -----------
+
+# Just nije nije TEST KORAR JONNO je amr code run kore kina 
+
+#                        -----------
+
+if __name__ == "__main__":
+    from tkinter import Tk
+    from src.managers.student_manager import StudentManager
+
+    manager = StudentManager()
+    root = Tk()
+    root.withdraw()
+    page = StatisticsPage(root, manager)
+    root.mainloop()
+        
