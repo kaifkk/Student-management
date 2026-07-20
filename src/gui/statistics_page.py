@@ -149,4 +149,54 @@ class StatisticsPage(Toplevel):
         grade_table.pack(pady=5)
 
         Button(self, text="Export Report (.txt)", command=self.export_report).pack(pady=5)
-        Button(self, text="Back", command=self.go_back).pack(pady=10)        
+        Button(self, text="Back", command=self.go_back).pack(pady=10)   
+        
+        
+             
+        
+    def export_report(self):
+        """File handling (lekha/write): borotomon statistics ke ekta text file e save kore."""
+        if self.summary is None:
+            messagebox.showerror("Error", "Export korar moto kono data nei.")
+            return
+
+        filepath = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt")],
+            initialfile="statistics_report.txt"
+        )
+        if not filepath:
+            return
+
+        try:
+            with open(filepath, "w", encoding="utf-8") as f:
+                s = self.summary
+                f.write("CLASS STATISTICS REPORT\n")
+                f.write("=" * 30 + "\n")
+                f.write(f"Total Students: {s['total_students']}\n")
+                f.write(f"Class Average: {s['class_average']}\n")
+                f.write(f"Highest Total: {s['highest_total']}\n")
+                f.write(f"Lowest Total: {s['lowest_total']}\n")
+                f.write(f"Median Total: {s['median_total']}\n")
+                f.write(f"Std Deviation: {s['std_dev']}\n")
+                f.write(f"Pass: {s['pass_fail']['Pass']}  Fail: {s['pass_fail']['Fail']}\n")
+                f.write(f"Topper: {s['topper'].name} ({s['topper'].percentage}%)\n")
+                f.write(f"Lowest: {s['lowest_performer'].name} ({s['lowest_performer'].percentage}%)\n\n")
+                f.write("Subject-wise Average:\n")
+                for subject, avg in s["subject_avg"].items():
+                    f.write(f"  {subject}: {round(avg, 2)}\n")
+                f.write("\nGrade Distribution:\n")
+                for grade, count in s["grade_dist"].items():
+                    f.write(f"  {grade}: {count}\n")
+            messagebox.showinfo("Exported", f"Report save hoyeche:\n{filepath}")
+        except IOError as e:
+            
+            # Exception handling: file lekha na gele error dekhabe
+            
+            messagebox.showerror("Error", f"File lekha jayni: {e}")
+        except PermissionError as e:
+            messagebox.showerror("Error", f"Onumoti nei (permission denied): {e}")
+
+    def go_back(self):
+        self.parent.deiconify()
+        self.destroy()        
